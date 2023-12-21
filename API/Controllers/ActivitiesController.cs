@@ -1,34 +1,44 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using Application.Activities;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ActivitiesController : ControllerBase
+    public class ActivitiesController : BaseApiController
     {
-        private readonly DataContext _context;
-        public ActivitiesController(DataContext context){
-            _context = context;
-        }
 
         [HttpGet]
         public async Task<IActionResult> Test(){
-            var activities = await _context.Activities.ToListAsync();
+            var activities = await Mediator.Send(new List.Query());
             return Ok(new {data = activities});
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetActivity(Guid id){
-            var activity = _context.Activities.Find(id);
+        public async Task<IActionResult> GetActivity(Guid id){
+            var activity = await Mediator.Send(new Details.Query(){Id = id});
             return Ok(new {data = activity});
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateActivity(Activity activity){
+            await Mediator.Send(new Create.Command(){Activity = activity});
+            return Ok(new {message = "Successfully created activity"});
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(Guid id, Activity activity){
+            activity.Id = id;
+
+            await Mediator.Send(new Edit.Command{Activity = activity});
+
+            return Ok(new {Message = "Successfully updated activity"});
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id){
+            await Mediator.Send(new Delete.Command{Id = id});
+
+            return Ok(new {Message = "Successfully deleted activity"});
+        }
     }
 }
