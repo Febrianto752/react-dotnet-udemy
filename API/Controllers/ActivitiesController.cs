@@ -8,7 +8,7 @@ namespace API.Controllers
     {
 
         [HttpGet]
-        public async Task<IActionResult> Test(){
+        public async Task<IActionResult> GetActivities(){
             var activities = await Mediator.Send(new List.Query());
             return Ok(new {data = activities});
         }
