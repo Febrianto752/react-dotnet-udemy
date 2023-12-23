@@ -4,10 +4,12 @@ import { Activity } from "../../../app/models/activity";
 interface IProps {
   activity: Activity;
   cancelSelectActivity: () => void;
+  openForm: (id?: string) => void;
 }
 export default function AcitivityDetails({
   activity,
   cancelSelectActivity,
+  openForm,
 }: IProps) {
   return (
     <Card>
@@ -22,7 +24,14 @@ export default function AcitivityDetails({
 
       <Card.Content extra>
         <Button.Group widths={2}>
-          <Button basic color="blue" content="Edit" />
+          <Button
+            onClick={() => {
+              openForm(activity.id);
+            }}
+            basic
+            color="blue"
+            content="Edit"
+          />
           <Button
             basic
             color="grey"

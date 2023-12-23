@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "semantic-ui-css/semantic.min.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.Fragment>
+  <React.StrictMode>
     <App />
-  </React.Fragment>
+  </React.StrictMode>
 );
