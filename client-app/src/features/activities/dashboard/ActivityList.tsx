@@ -3,9 +3,10 @@ import { Activity } from "../../../app/models/activity";
 
 interface IProps {
   activities: Activity[];
+  selectActivity: (id: string) => void;
 }
 
-export default function ActivityList({ activities }: IProps) {
+export default function ActivityList({ activities, selectActivity }: IProps) {
   return (
     <Segment>
       <Item.Group divided>
@@ -22,7 +23,12 @@ export default function ActivityList({ activities }: IProps) {
                   </div>
                 </Item.Description>
                 <Item.Extra>
-                  <Button floated="right" content="View" color="blue" />
+                  <Button
+                    onClick={() => selectActivity(activity.id)}
+                    floated="right"
+                    content="View"
+                    color="blue"
+                  />
                   <Label basic content={activity.category} />
                 </Item.Extra>
               </Item.Content>
