@@ -51,6 +51,13 @@ function App() {
     setSelectedActivity(activity);
   }
 
+  function handleDeleteActivity(id: string) {
+    const agreeToDelete = confirm("are your sure ?");
+    if (agreeToDelete) {
+      setActivities([...activities.filter((a) => a.id !== id)]);
+    }
+  }
+
   return (
     <div>
       <Navbar openForm={handleFormOpen} />
@@ -68,6 +75,7 @@ function App() {
           openForm={handleFormOpen}
           closeForm={handleFormClose}
           createOrEdit={handleCreateOrEditActivity}
+          deleteActivity={handleDeleteActivity}
         />
       </Container>
     </div>

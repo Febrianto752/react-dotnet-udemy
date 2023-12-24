@@ -13,7 +13,7 @@ export default function AcitivityDetails({
 }: IProps) {
   return (
     <Card>
-      <Image src="/assets/images/category/film.jpg" />
+      <Image src={`/assets/images/category/film.jpg`} />
       <Card.Content>
         <Card.Header>{activity.title}</Card.Header>
         <Card.Meta>
