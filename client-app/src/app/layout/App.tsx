@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 
-import axios from "axios";
 import { Container, Header, List } from "semantic-ui-react";
 import { Activity } from "../models/activity";
 import Navbar from "./Navbar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import { v4 as uuidv4 } from "uuid";
+import agent from "../api/agent";
+import LoadingComponent from "./LoadingComponent";
 
 function App() {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -13,10 +14,16 @@ function App() {
     Activity | undefined
   >(undefined);
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/activities").then((response: any) => {
-      setActivities(response.data.data);
+    agent.Activities.list().then((response) => {
+      response.data.forEach((activity: Activity) => {
+        activity.date = activity.date.split("T")[0];
+      });
+
+      setActivities(response.data);
+      setLoading(false);
     });
   }, []);
 
@@ -58,28 +65,32 @@ function App() {
     }
   }
 
-  return (
-    <div>
-      <Navbar openForm={handleFormOpen} />
-      <br />
-      <br />
-      <br />
+  if (loading) {
+    return <LoadingComponent />;
+  } else {
+    return (
+      <div>
+        <Navbar openForm={handleFormOpen} />
+        <br />
+        <br />
+        <br />
 
-      <Container>
-        <ActivityDashboard
-          activities={activities}
-          selectedActivity={selectedActivity}
-          selectActivity={handleSelectActivity}
-          cancelSelectActivity={handleCancelSelectActivity}
-          editMode={editMode}
-          openForm={handleFormOpen}
-          closeForm={handleFormClose}
-          createOrEdit={handleCreateOrEditActivity}
-          deleteActivity={handleDeleteActivity}
-        />
-      </Container>
-    </div>
-  );
+        <Container>
+          <ActivityDashboard
+            activities={activities}
+            selectedActivity={selectedActivity}
+            selectActivity={handleSelectActivity}
+            cancelSelectActivity={handleCancelSelectActivity}
+            editMode={editMode}
+            openForm={handleFormOpen}
+            closeForm={handleFormClose}
+            createOrEdit={handleCreateOrEditActivity}
+            deleteActivity={handleDeleteActivity}
+          />
+        </Container>
+      </div>
+    );
+  }
 }
 
 export default App;
