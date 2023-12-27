@@ -12,52 +12,10 @@ import { observer } from "mobx-react-lite";
 
 function App() {
   const { activityStore } = useStore();
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [selectedActivity, setSelectedActivity] = useState<
-    Activity | undefined
-  >(undefined);
-  const [editMode, setEditMode] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     activityStore.loadActivities();
   }, [activityStore]);
-
-  function handleCreateOrEditActivity(activity: Activity) {
-    setSubmitting(true);
-    if (activity.id) {
-      agent.Activities.update(activity).then(() => {
-        setActivities([
-          ...activities.filter((a) => a.id !== activity.id),
-          activity,
-        ]);
-        setSelectedActivity(activity);
-        setEditMode(false);
-        setSubmitting(false);
-      });
-    } else {
-      activity.id = uuidv4();
-      agent.Activities.create(activity).then(() => {
-        setActivities([...activities, activity]);
-      });
-      setSelectedActivity(activity);
-      setEditMode(false);
-      setSubmitting(false);
-    }
-  }
-
-  function handleDeleteActivity(id: string) {
-    const agreeToDelete = confirm("are your sure ?");
-    if (agreeToDelete) {
-      setSubmitting(true);
-      agent.Activities.delete(id).then(() => {
-        setSubmitting(false);
-        setActivities([...activities.filter((a) => a.id !== id)]);
-        // handleCancelSelectActivity();
-      });
-    }
-  }
 
   if (activityStore.loadingInitial) {
     return <LoadingComponent />;
@@ -70,12 +28,7 @@ function App() {
         <br />
 
         <Container>
-          <ActivityDashboard
-            activities={activityStore.activities}
-            createOrEdit={handleCreateOrEditActivity}
-            deleteActivity={handleDeleteActivity}
-            submitting={submitting}
-          />
+          <ActivityDashboard />
         </Container>
       </div>
     );

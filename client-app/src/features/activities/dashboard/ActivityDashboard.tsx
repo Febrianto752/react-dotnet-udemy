@@ -6,37 +6,19 @@ import ActivityForm from "../form/ActivityForm";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 
-interface IProps {
-  activities: Activity[];
-  createOrEdit: (activity: Activity) => void;
-  deleteActivity: (id: string) => void;
-  submitting: boolean;
-}
-
-function ActivityDashboard({
-  activities,
-  createOrEdit,
-  deleteActivity,
-  submitting,
-}: IProps) {
+function ActivityDashboard() {
   const { activityStore } = useStore();
-  const { selectedActivity, editMode } = activityStore;
+  const { selectedActivity, editMode, activities } = activityStore;
   return (
     <Grid>
       <Grid.Column width="10">
-        <ActivityList
-          activities={activities}
-          deleteActivity={deleteActivity}
-          submitting={submitting}
-        />
+        <ActivityList activities={activities} />
       </Grid.Column>
       <Grid.Column width={6}>
         {selectedActivity && <AcitivityDetails />}
         {editMode && selectedActivity && <h3>Edit Form</h3>}
         {editMode && !selectedActivity && <h3>Create Form</h3>}
-        {editMode && (
-          <ActivityForm createOrEdit={createOrEdit} submitting={submitting} />
-        )}
+        {editMode && <ActivityForm />}
       </Grid.Column>
     </Grid>
   );

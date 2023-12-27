@@ -2,15 +2,17 @@ import { Button, Form, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
-interface IProps {
-  createOrEdit: (activity: Activity) => void;
-  submitting: boolean;
-}
-
-export default function ActivityForm({ createOrEdit, submitting }: IProps) {
+function ActivityForm() {
   const { activityStore } = useStore();
-  const { selectedActivity, closeForm } = activityStore;
+  const {
+    selectedActivity,
+    closeForm,
+    createActivity,
+    updateActivity,
+    loading,
+  } = activityStore;
   const initialState: Activity = selectedActivity ?? {
     id: "",
     title: "",
@@ -23,7 +25,11 @@ export default function ActivityForm({ createOrEdit, submitting }: IProps) {
   const [activity, setActivity] = useState(initialState);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    createOrEdit(activity);
+    if (activity.id) {
+      updateActivity(activity);
+    } else {
+      createActivity(activity);
+    }
   };
 
   const handleInputChange = (
@@ -74,14 +80,14 @@ export default function ActivityForm({ createOrEdit, submitting }: IProps) {
           name="venue"
         />
         <Button
-          loading={submitting}
+          loading={loading}
           floated="right"
           positive
           type="submit"
           content="Submit"
         />
         <Button
-          loading={submitting}
+          loading={loading}
           onClick={() => closeForm()}
           floated="right"
           type="button"
@@ -91,3 +97,5 @@ export default function ActivityForm({ createOrEdit, submitting }: IProps) {
     </Segment>
   );
 }
+
+export default observer(ActivityForm);
