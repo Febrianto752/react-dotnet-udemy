@@ -21,34 +21,8 @@ function App() {
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
-    agent.Activities.list().then((response) => {
-      response.data.forEach((activity: Activity) => {
-        activity.date = activity.date.split("T")[0];
-      });
-
-      setActivities(response.data);
-      setLoading(false);
-    });
-  }, []);
-
-  function handleSelectActivity(id: string) {
-    setSelectedActivity(activities.find((a) => a.id == id));
-    setEditMode(false);
-  }
-
-  function handleCancelSelectActivity() {
-    setSelectedActivity(undefined);
-    setEditMode(false);
-  }
-
-  function handleFormOpen(id?: string) {
-    id ? handleSelectActivity(id) : handleCancelSelectActivity();
-    setEditMode(true);
-  }
-
-  function handleFormClose() {
-    setEditMode(false);
-  }
+    activityStore.loadActivities();
+  }, [activityStore]);
 
   function handleCreateOrEditActivity(activity: Activity) {
     setSubmitting(true);
@@ -80,36 +54,24 @@ function App() {
       agent.Activities.delete(id).then(() => {
         setSubmitting(false);
         setActivities([...activities.filter((a) => a.id !== id)]);
-        handleCancelSelectActivity();
+        // handleCancelSelectActivity();
       });
     }
   }
 
-  if (loading) {
+  if (activityStore.loadingInitial) {
     return <LoadingComponent />;
   } else {
     return (
       <div>
-        <Navbar openForm={handleFormOpen} />
+        <Navbar />
         <br />
         <br />
         <br />
 
         <Container>
-          <h2>{activityStore.title}</h2>
-          <Button
-            content="tambahkan '!'"
-            positive
-            onClick={activityStore.setTitle}
-          />
           <ActivityDashboard
-            activities={activities}
-            selectedActivity={selectedActivity}
-            selectActivity={handleSelectActivity}
-            cancelSelectActivity={handleCancelSelectActivity}
-            editMode={editMode}
-            openForm={handleFormOpen}
-            closeForm={handleFormClose}
+            activities={activityStore.activities}
             createOrEdit={handleCreateOrEditActivity}
             deleteActivity={handleDeleteActivity}
             submitting={submitting}

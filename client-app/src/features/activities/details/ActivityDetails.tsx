@@ -1,16 +1,21 @@
 import { Button, Card, Image } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
+import { useStore } from "../../../app/stores/store";
 
-interface IProps {
-  activity: Activity;
-  cancelSelectActivity: () => void;
-  openForm: (id?: string) => void;
-}
-export default function AcitivityDetails({
-  activity,
-  cancelSelectActivity,
-  openForm,
-}: IProps) {
+export default function AcitivityDetails() {
+  const { activityStore } = useStore();
+
+  const {
+    selectedActivity: activity,
+    openForm,
+    cancelSelectedActivity,
+    closeForm,
+  } = activityStore;
+
+  if (!activity) {
+    return <></>;
+  }
+
   return (
     <Card>
       <Image src={`/assets/images/category/film.jpg`} />
@@ -36,7 +41,10 @@ export default function AcitivityDetails({
             basic
             color="grey"
             content="Cancel"
-            onClick={cancelSelectActivity}
+            onClick={() => {
+              cancelSelectedActivity();
+              closeForm();
+            }}
           />
         </Button.Group>
       </Card.Content>
