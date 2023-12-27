@@ -11,7 +11,7 @@ axios.defaults.baseURL = "http://localhost:5000/api";
 
 axios.interceptors.response.use(async (response) => {
   try {
-    await sleep(2000);
+    await sleep(1000);
     return response;
   } catch (error) {
     console.log(error);
@@ -23,17 +23,23 @@ const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
   get: <T>(url: string) => axios.get<T>(url).then(responseBody),
-  post: (url: string, body: object) => axios.post(url, body).then(responseBody),
-  put: (url: string, body: object) => axios.put(url, body).then(responseBody),
-  del: (url: string) => axios.delete(url).then(responseBody),
+  post: <T>(url: string, body: object) =>
+    axios.post<T>(url, body).then(responseBody),
+  put: <T>(url: string, body: object) =>
+    axios.put<T>(url, body).then(responseBody),
+  del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
 const Activities = {
-  list: () => requests.get<ResponseJson<Activity[]>>("/activities"),
-};
-
-type ResponseJson<T> = {
-  data: T;
+  list: () => requests.get<{ data: Activity[] }>("/activities"),
+  details: (id: string) =>
+    requests.get<{ data: Activity }>(`/activities/${id}`),
+  create: (activity: Activity) =>
+    requests.post<{ message: string }>("/activities", activity),
+  update: (activity: Activity) =>
+    requests.put<{ message: string }>(`/activities/${activity.id}`, activity),
+  delete: (id: string) =>
+    requests.del<{ message: string }>(`/activities/${id}`),
 };
 
 const agent = {

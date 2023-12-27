@@ -6,12 +6,14 @@ interface IProps {
   activity: Activity | undefined;
   closeForm: () => void;
   createOrEdit: (activity: Activity) => void;
+  submitting: boolean;
 }
 
 export default function ActivityForm({
   activity: selectedActivity,
   closeForm,
   createOrEdit,
+  submitting,
 }: IProps) {
   const initialState: Activity = selectedActivity ?? {
     id: "",
@@ -25,7 +27,6 @@ export default function ActivityForm({
   const [activity, setActivity] = useState(initialState);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    console.log("initial state : ", initialState);
     createOrEdit(activity);
   };
 
@@ -76,8 +77,15 @@ export default function ActivityForm({
           onChange={handleInputChange}
           name="venue"
         />
-        <Button floated="right" positive type="submit" content="Submit" />
         <Button
+          loading={submitting}
+          floated="right"
+          positive
+          type="submit"
+          content="Submit"
+        />
+        <Button
+          loading={submitting}
           onClick={() => closeForm()}
           floated="right"
           type="button"

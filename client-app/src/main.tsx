@@ -5,9 +5,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // import "./index.css";
 import "semantic-ui-css/semantic.min.css";
+import { StoreContext, store } from "./app/stores/store";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <StoreContext.Provider value={store}>
+      <App />
+    </StoreContext.Provider>
   </React.StrictMode>
 );
