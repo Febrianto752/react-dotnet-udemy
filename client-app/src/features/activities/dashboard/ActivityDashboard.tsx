@@ -8,11 +8,11 @@ import { observer } from "mobx-react-lite";
 
 function ActivityDashboard() {
   const { activityStore } = useStore();
-  const { selectedActivity, editMode, activities } = activityStore;
+  const { selectedActivity, editMode, activitiesByDate } = activityStore;
   return (
     <Grid>
       <Grid.Column width="10">
-        <ActivityList activities={activities} />
+        <ActivityList activities={activitiesByDate} />
       </Grid.Column>
       <Grid.Column width={6}>
         {selectedActivity && <AcitivityDetails />}

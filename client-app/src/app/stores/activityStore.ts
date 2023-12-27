@@ -20,6 +20,12 @@ export default class ActivityStore {
     makeAutoObservable(this);
   }
 
+  get activitiesByDate() {
+    return this.activities
+      .map((activity) => activity)
+      .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+  }
+
   loadActivities = async () => {
     this.setLoadingInitial(true);
 
