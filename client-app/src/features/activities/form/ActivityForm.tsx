@@ -40,7 +40,7 @@ function ActivityForm() {
   };
 
   return (
-    <Segment clearing>
+    <Segment clearing className="shadow-lg">
       <Form onSubmit={handleSubmit}>
         <Form.Input
           placeholder="Title"

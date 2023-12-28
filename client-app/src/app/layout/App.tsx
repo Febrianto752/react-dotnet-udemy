@@ -9,30 +9,22 @@ import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
+import { Outlet } from "react-router-dom";
 
 function App() {
-  const { activityStore } = useStore();
+  return (
+    <div>
+      <Navbar />
+      <br />
+      <br />
+      <br />
 
-  useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
-
-  if (activityStore.loadingInitial) {
-    return <LoadingComponent />;
-  } else {
-    return (
-      <div>
-        <Navbar />
-        <br />
-        <br />
-        <br />
-
-        <Container>
-          <ActivityDashboard />
-        </Container>
-      </div>
-    );
-  }
+      <Container>
+        {/* <ActivityDashboard /> */}
+        <Outlet />
+      </Container>
+    </div>
+  );
 }
 
 export default observer(App);
