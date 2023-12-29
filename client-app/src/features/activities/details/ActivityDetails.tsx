@@ -1,16 +1,22 @@
 import { Button, Card, Image } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
-export default function AcitivityDetails() {
+function AcitivityDetails() {
   const { activityStore } = useStore();
-
   const {
     selectedActivity: activity,
-    openForm,
-    cancelSelectedActivity,
-    closeForm,
+    loadActivity,
+    loadingInitial,
   } = activityStore;
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) loadActivity(id);
+  }, [id, loadActivity]);
 
   if (!activity) {
     return <></>;
@@ -29,25 +35,12 @@ export default function AcitivityDetails() {
 
       <Card.Content extra>
         <Button.Group widths={2}>
-          <Button
-            onClick={() => {
-              openForm(activity.id);
-            }}
-            basic
-            color="blue"
-            content="Edit"
-          />
-          <Button
-            basic
-            color="grey"
-            content="Cancel"
-            onClick={() => {
-              cancelSelectedActivity();
-              closeForm();
-            }}
-          />
+          <Button basic color="blue" content="Edit" />
+          <Button basic color="grey" content="Cancel" />
         </Button.Group>
       </Card.Content>
     </Card>
   );
 }
+
+export default observer(AcitivityDetails);

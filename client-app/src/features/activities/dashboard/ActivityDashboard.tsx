@@ -10,7 +10,7 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 function ActivityDashboard() {
   const { activityStore } = useStore();
-  const { selectedActivity, editMode, activitiesByDate } = activityStore;
+  const { activitiesByDate } = activityStore;
 
   useEffect(() => {
     activityStore.loadActivities();
@@ -25,10 +25,7 @@ function ActivityDashboard() {
           <ActivityList activities={activitiesByDate} />
         </Grid.Column>
         <Grid.Column width={6}>
-          {selectedActivity && <AcitivityDetails />}
-          {editMode && selectedActivity && <h3>Edit Form</h3>}
-          {editMode && !selectedActivity && <h3>Create Form</h3>}
-          {editMode && <ActivityForm />}
+          <h2>Activity Filters</h2>
         </Grid.Column>
       </Grid>
     );
