@@ -1,8 +1,5 @@
-import { Grid, List } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
+import { Grid } from "semantic-ui-react";
 import ActivityList from "./ActivityList";
-import AcitivityDetails from "../details/ActivityDetails";
-import ActivityForm from "../form/ActivityForm";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";

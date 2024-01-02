@@ -50,14 +50,19 @@ export default class ActivityStore {
     let activity = this.getActivity(id);
     if (activity) {
       this.selectedActivity = activity;
+      return activity;
     } else {
       this.setLoadingInitial(true);
       try {
         activity = await agent.Activities.details(id);
         if (activity) {
           this.setActivity(activity);
-          this.selectedActivity = activity;
+          runInAction(() => {
+            this.selectedActivity = activity;
+          });
+
           this.setLoadingInitial(false);
+          return activity;
         } else {
           throw new Error("activity not found");
         }

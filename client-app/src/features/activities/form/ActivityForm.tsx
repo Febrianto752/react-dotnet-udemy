@@ -3,12 +3,23 @@ import { Activity } from "../../../app/models/activity";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { useParams } from "react-router-dom";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 function ActivityForm() {
   const { activityStore } = useStore();
-  const { selectedActivity, createActivity, updateActivity, loading } =
-    activityStore;
-  const initialState: Activity = selectedActivity ?? {
+  const {
+    selectedActivity,
+    createActivity,
+    updateActivity,
+    loading,
+    loadActivity,
+    loadingInitial,
+  } = activityStore;
+
+  const { id } = useParams();
+
+  const [activity, setActivity] = useState<Activity>({
     id: "",
     title: "",
     description: "",
@@ -16,8 +27,11 @@ function ActivityForm() {
     date: "",
     category: "",
     venue: "",
-  };
-  const [activity, setActivity] = useState(initialState);
+  });
+
+  useEffect(() => {
+    if (id) loadActivity(id).then((activity) => setActivity(activity!));
+  }, [id, loadActivity]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     if (activity.id) {
@@ -33,6 +47,8 @@ function ActivityForm() {
     const { name, value } = event.target;
     setActivity({ ...activity, [name]: value });
   };
+
+  if (loadingInitial) return <LoadingComponent />;
 
   return (
     <Segment clearing className="shadow-lg">
