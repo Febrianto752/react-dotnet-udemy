@@ -5,14 +5,11 @@ import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 
-interface IProps {
-  activities: Activity[];
-}
-
-function ActivityList({ activities }: IProps) {
+function ActivityList() {
   const [target, setTarget] = useState<string>("");
 
   const { activityStore } = useStore();
+  const { activitiesByDate } = activityStore;
   const { loading, deleteActivity } = activityStore;
 
   const handleDeleteActivity = (
@@ -26,7 +23,7 @@ function ActivityList({ activities }: IProps) {
   return (
     <Segment>
       <Item.Group divided>
-        {activities.map((activity) => {
+        {activitiesByDate.map((activity) => {
           return (
             <Item key={activity.id}>
               <Item.Content>

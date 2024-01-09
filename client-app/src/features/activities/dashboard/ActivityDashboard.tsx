@@ -7,7 +7,6 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 function ActivityDashboard() {
   const { activityStore } = useStore();
-  const { activitiesByDate } = activityStore;
 
   useEffect(() => {
     activityStore.loadActivities();
@@ -19,7 +18,7 @@ function ActivityDashboard() {
     return (
       <Grid>
         <Grid.Column width="10">
-          <ActivityList activities={activitiesByDate} />
+          <ActivityList />
         </Grid.Column>
         <Grid.Column width={6}>
           <h2>Activity Filters</h2>

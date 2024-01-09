@@ -3,8 +3,9 @@ import { Activity } from "../../../app/models/activity";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { v4 as uuidv4 } from "uuid";
 
 function ActivityForm() {
   const { activityStore } = useStore();
@@ -18,6 +19,7 @@ function ActivityForm() {
   } = activityStore;
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [activity, setActivity] = useState<Activity>({
     id: "",
@@ -35,9 +37,14 @@ function ActivityForm() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     if (activity.id) {
-      updateActivity(activity);
+      updateActivity(activity).then(() =>
+        navigate(`/activities/${activity.id}`)
+      );
     } else {
-      createActivity(activity);
+      activity.id = uuidv4();
+      createActivity(activity).then(() =>
+        navigate(`/activities/${activity.id}`)
+      );
     }
   };
 
