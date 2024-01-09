@@ -3,7 +3,7 @@ import { Activity } from "../../../app/models/activity";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { v4 as uuidv4 } from "uuid";
 
@@ -105,6 +105,8 @@ function ActivityForm() {
           content="Submit"
         />
         <Button
+          as={Link}
+          to="/activities"
           loading={loading}
           floated="right"
           type="button"
