@@ -17,14 +17,10 @@ function ActivityList() {
           <Fragment key={groupKey}>
             <Header sub color="teal">
               {groupKey}
-              <Segment>
-                <Item.Group divided>
-                  {activities.map((activity) => {
-                    return <ActivityItem activity={activity} />;
-                  })}
-                </Item.Group>
-              </Segment>
             </Header>
+            {activities.map((activity) => {
+              return <ActivityItem activity={activity} />;
+            })}
           </Fragment>
         );
       })}
