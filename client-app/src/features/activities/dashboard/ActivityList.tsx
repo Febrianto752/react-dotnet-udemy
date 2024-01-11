@@ -1,6 +1,6 @@
-import { Button, Item, Label, Segment } from "semantic-ui-react";
+import { Button, Header, Item, Label, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
-import { SyntheticEvent, useState } from "react";
+import { Fragment, SyntheticEvent, useState } from "react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
@@ -8,16 +8,27 @@ import ActivityItem from "./ActivityItem";
 
 function ActivityList() {
   const { activityStore } = useStore();
-  const { activitiesByDate } = activityStore;
+  const { groupedActivities } = activityStore;
 
   return (
-    <Segment>
-      <Item.Group divided>
-        {activitiesByDate.map((activity) => {
-          return <ActivityItem activity={activity} />;
-        })}
-      </Item.Group>
-    </Segment>
+    <>
+      {groupedActivities.map(([groupKey, activities]) => {
+        return (
+          <Fragment key={groupKey}>
+            <Header sub color="teal">
+              {groupKey}
+              <Segment>
+                <Item.Group divided>
+                  {activities.map((activity) => {
+                    return <ActivityItem activity={activity} />;
+                  })}
+                </Item.Group>
+              </Segment>
+            </Header>
+          </Fragment>
+        );
+      })}
+    </>
   );
 }
 
