@@ -40,7 +40,7 @@ export default function ActivityItem({ activity }: IProps) {
       <Segment>
         <span>
           <Icon name="clock" /> {activity.date}
-          <Icon name="marker" /> {activity.venue}
+          <Icon name="marker" className="ms-3" /> {activity.venue}
         </span>
       </Segment>
       <Segment secondary>Attendees go here</Segment>
