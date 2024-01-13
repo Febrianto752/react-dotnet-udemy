@@ -10,8 +10,8 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetActivities(){
-            var activities = await Mediator.Send(new List.Query());
-            return Ok(new {data = activities});
+            var result = await Mediator.Send(new List.Query());
+            return HandleResult(result);
         }
 
         [HttpGet("{id}")]
