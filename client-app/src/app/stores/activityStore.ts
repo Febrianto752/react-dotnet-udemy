@@ -45,7 +45,7 @@ export default class ActivityStore {
     try {
       const response = await agent.Activities.list();
       runInAction(() => {
-        const activities = response.data;
+        const activities = response;
         activities.forEach((activity: Activity) => {
           this.setActivity(activity);
         });

@@ -23,8 +23,8 @@ namespace API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateActivity(Activity activity){
-            await Mediator.Send(new Create.Command(){Activity = activity});
-            return Ok(new {message = "Successfully created activity"});
+            var result = await Mediator.Send(new Create.Command(){Activity = activity});
+            return HandleResult(result);
         }
 
         [HttpPut("{id}")]
